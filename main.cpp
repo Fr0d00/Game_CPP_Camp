@@ -14,6 +14,7 @@ struct Point
 
 
 
+
 int main(){
     float resM = 2.f;
     float yVel = 0.f;
@@ -27,13 +28,19 @@ int main(){
     sf::RenderWindow window(sf::VideoMode(res.x, res.y), "Game");
     window.setFramerateLimit(60);
 
-    sf::Texture tChar;
+    sf::Texture tChar, tSword;
     tChar.loadFromFile("images/Knight/Knight.png");
+    tSword.loadFromFile("images/Sword/Sword.png");
 
-    sf::Sprite sChar(tChar);
+    sf::Sprite sChar(tChar), sSword(tSword);
     sChar.setScale(resM, resM);
+    sSword.setScale(resM, resM);
+
     sChar.setOrigin(8, 28);
+    sSword.setOrigin(3, 29);
+
     sChar.setPosition(charPos.x, charPos.y);
+    sSword.setPosition(charPos.x, charPos.y);
 
     while(window.isOpen()){
         sf::Event event;
@@ -47,18 +54,23 @@ int main(){
         switch (gameMode)
         {
         case 0:
+
             if(charPos.y > earthPos){
                 charPos.y = earthPos;
                 yVel = 0.f;
             }
-
+            if(charPos.x < 0){
+                charPos.x = 0;
+            }
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
                 charPos.x += 5;
                 sChar.setScale(resM, resM);
+                sSword.setScale(resM, resM);
             }
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
                 charPos.x -= 5;
                 sChar.setScale(-resM, resM);
+                sSword.setScale(-resM, resM);
             }
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && charPos.y == earthPos){
                 yVel = -3.f;
@@ -69,7 +81,9 @@ int main(){
             yVel += 0.17;
 
             sChar.setPosition(charPos.x, charPos.y);
+            sSword.setPosition(charPos.x, charPos.y);
             window.draw(sChar);
+            window.draw(sSword);
             window.display();
             window.clear();
             break;
