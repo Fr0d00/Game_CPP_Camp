@@ -39,6 +39,8 @@ int main(){
     sChar.setOrigin(8, 28);
     sSword.setOrigin(3, 29);
 
+    sSword.setRotation(0);
+
     sChar.setPosition(charPos.x, charPos.y);
     sSword.setPosition(charPos.x, charPos.y);
 
@@ -54,6 +56,7 @@ int main(){
         switch (gameMode)
         {
         case 0:
+
 
             if(charPos.y > earthPos){
                 charPos.y = earthPos;
@@ -76,6 +79,17 @@ int main(){
                 yVel = -3.f;
             }
 
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+                if(sChar.getScale().x > 0){
+                    sSword.setRotation(sSword.getRotation() + 15);
+                }
+                else{
+                    sSword.setRotation(sSword.getRotation() - 15);
+                }
+            }
+            else{
+                sSword.setRotation(0);
+            }
 
             charPos.y += yVel;
             yVel += 0.17;
