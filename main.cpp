@@ -3,8 +3,8 @@
 
 struct Point
 {
-    int x;
-    int y;
+    float x;
+    float y;
     Point(int x, int y){
         this->x = x;
         this->y = y;
@@ -16,10 +16,12 @@ struct Point
 
 int main(){
     float resM = 2.f;
+    float yVel = 0.f;
     Point res(500 * resM, 400 * resM);
     Point charPos(200 * resM, 200 * resM);
 
     int gameMode = 0;
+    int earthPos = 200 * resM;
 
 
     sf::RenderWindow window(sf::VideoMode(res.x, res.y), "Game");
@@ -45,6 +47,29 @@ int main(){
         switch (gameMode)
         {
         case 0:
+            if(charPos.y > earthPos){
+                charPos.y = earthPos;
+                yVel = 0.f;
+            }
+
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+                charPos.x += 5;
+                sChar.setScale(resM, resM);
+            }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+                charPos.x -= 5;
+                sChar.setScale(-resM, resM);
+            }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && charPos.y == earthPos){
+                yVel = -3.f;
+            }
+
+
+            charPos.y += yVel;
+            yVel += 0.17;
+
+            sChar.setPosition(charPos.x, charPos.y);
+            window.draw(sChar);
             window.display();
             window.clear();
             break;
