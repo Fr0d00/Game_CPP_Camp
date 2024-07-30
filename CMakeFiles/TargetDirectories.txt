@@ -1,0 +1,2 @@
+/Users/nikitaantonov/Documents/CPP_Game2/Game_CPP_Camp/CMakeFiles/edit_cache.dir
+/Users/nikitaantonov/Documents/CPP_Game2/Game_CPP_Camp/CMakeFiles/rebuild_cache.dir
