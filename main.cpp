@@ -41,7 +41,7 @@ int main()
     int gameMode = 0;
     int earthPos = 256 * resM;
     int charVec = 1;
-    int charHealth = 3;
+    int charHealth = 6;
 
     bool gettingDamage = 0;
 
@@ -66,7 +66,7 @@ int main()
     sSword.setScale(resM, resM);
     dmgZone.setScale(resM, resM);
     sDark.setScale(resM, resM);
-    sHealth.setScale(resM, resM);
+    sHealth.setScale(resM / 2, resM / 2);
 
     sChar.setOrigin(8, 28);
     sSword.setOrigin(3, 29);
@@ -81,7 +81,8 @@ int main()
         goblins[i]->setTexture(&tGoblin);
         goblins[i]->setScale(resM);
         goblins[i]->setPosition(100 * resM, 256 * resM);
-        goblins[i]->setSpeed(3);
+        goblins[i]->setSpeed(2);
+        goblins[i]->setHealth(5);
     }
 
     Crate *boxes[3];
@@ -139,7 +140,7 @@ int main()
 
             for (int i = 0; i < 3; i++)
             {
-                if (boxes[i] != nullptr)
+                if (boxes[i])
                 {
                     window.draw(*boxes[i]->getSprite());
                     // if(boxes[i]->getPosition().x <)
@@ -147,6 +148,17 @@ int main()
                     {
                         charPos.x -= 5 * charVec;
                         // earthPos = 200 * resM;
+                    }
+                    for (int j = 0; j < 1; j++)
+                    {
+                        if (goblins[j] != nullptr)
+                        {
+                            if (checkHitSide(goblins[j]->getPosition().x, goblins[j]->getPosition().y, boxes[i]->getPosition().x, boxes[i]->getPosition().y, 32, 31))
+                            {
+                                goblins[i]->setPosition(goblins[j]->getPosition().x - goblins[j]->getSpeed() * goblins[j]->getVector(), 256 * resM);
+                                // earthPos = 200 * resM;
+                            }
+                        }
                     }
                     if (checkHitSide(boxes[i]->getPosition().x, boxes[i]->getPosition().y, dmgZone.getPosition().x, dmgZone.getPosition().y, 120, 120) && gettingDamage && boxes[i]->isBreakable())
                     {
@@ -166,6 +178,15 @@ int main()
                 {
                     window.draw(*goblins[i]->getSprite());
                     goblins[i]->searchChar(sChar.getPosition().x, resM);
+                    if (checkHitSide(goblins[i]->getPosition().x, goblins[i]->getPosition().y, dmgZone.getPosition().x, dmgZone.getPosition().y, 120, 120) && gettingDamage)
+                    {
+                        goblins[i]->setHealth(goblins[i]->getHealth() - 1);
+                        if (goblins[i]->getHealth() <= 0)
+                        {
+                            delete goblins[i];
+                            goblins[i] = nullptr;
+                        }
+                    }
                 }
             }
 
@@ -194,7 +215,7 @@ int main()
             }
             elapsed1 = clock.getElapsedTime();
             elapsed2 = clock2.getElapsedTime();
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && elapsed1 > sf::seconds(0.5))
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && elapsed1 > sf::seconds(0.2))
             {
                 for (int i = 0; i < 12; i++)
                 {
@@ -202,11 +223,11 @@ int main()
                     if (sChar.getScale().x > 0)
                     {
 
-                        sSword.setRotation(sSword.getRotation() + 7.5);
+                        sSword.setRotation(90);
                     }
                     else
                     {
-                        sSword.setRotation(sSword.getRotation() - 7.5);
+                        sSword.setRotation(-90);
                     }
                 }
                 gettingDamage = 1;
@@ -218,16 +239,17 @@ int main()
                 gettingDamage = 0;
             }
 
-
-
-
-
+            for (int i = 0; i < charHealth; i++)
+            {
+                sHealth.setPosition((450 + i * 16) * resM, 10 * resM);
+                window.draw(sHealth);
+            }
 
             charPos.y += yVel;
-            yVel += 0.14;
+            yVel += 0.17;
 
             sChar.setPosition(charPos.x, charPos.y);
-            sSword.setPosition(charPos.x, charPos.y);
+            sSword.setPosition(charPos.x, charPos.y - 5);
             dmgZone.setPosition(charPos.x, charPos.y);
             window.draw(sChar);
             window.draw(sSword);

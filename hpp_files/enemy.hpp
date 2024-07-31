@@ -3,7 +3,7 @@
 class Enemy
 {
 private:
-    int health, damage, speed;
+    int health, damage, speed, vector;
     sf::Sprite sprite;
 
 public:
@@ -45,6 +45,13 @@ public:
     {
         return damage;
     }
+    int getSpeed(){
+        return speed;
+    }
+    sf::Vector2f getPosition()
+    {
+        return sprite.getPosition();
+    }
     sf::Sprite *getSprite()
     {
         return &sprite;
@@ -55,12 +62,17 @@ public:
         {
             sprite.setPosition(sprite.getPosition().x + speed, sprite.getPosition().y);
             sprite.setScale(mult, mult);
+            vector = 1;
         }
         else if (sprite.getPosition().x > charPosX + 30)
         {
             sprite.setPosition(sprite.getPosition().x - speed, sprite.getPosition().y);
             sprite.setScale(-mult, mult);
+            vector = -1;
         }
 
+    }
+    int getVector(){
+        return vector;
     }
 };
