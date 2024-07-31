@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
-#include<iostream>
+#include <iostream>
+#include "hpp_files/crate.hpp"
+#include "hpp_files/wall.hpp"
 
 struct Point
 {
@@ -11,35 +13,6 @@ struct Point
     }
 };
 
-class Crate{
-private:
-    sf::Sprite box;
-    int posX, posY;
-public:
-    Crate(sf::Texture *text, int posX, int posY, int mult){
-        box.setTexture(*text, true);
-        box.setPosition(posX, posY);
-        box.setOrigin(8, 16);
-        box.setScale(mult, mult);
-        this->posX = posX;
-        this->posY = posY;
-    }
-    void setPosition(int X, int Y){
-        posX = X;
-        posY = Y;
-        box.setPosition(posX, posY);
-    }
-    int getPositionX(){
-        return posX;
-    }
-    int getPositionY(){
-        return posY;
-    }
-    sf::Sprite *getSprite(){
-        return &box;
-    }
-
-};
 
 bool checkHitSide(int charPosX, int charPosY, int posX, int posY, int scaleX, int scaleY){
     if((charPosX > posX - scaleX / 2 && charPosX < posX + scaleX / 2) && charPosY > posY - scaleY){
@@ -48,17 +21,19 @@ bool checkHitSide(int charPosX, int charPosY, int posX, int posY, int scaleX, in
 }
 
 
+
+
 int main(){
 
 
     float resM = 2.f;
     float yVel = 0.f;
     float yVel2 = 0.f;
-    Point res(500 * resM, 400 * resM);
-    Point charPos(200 * resM, 200 * resM);
+    Point res(576 * resM, 256 * resM);
+    Point charPos(200 * resM, 256 * resM);
 
     int gameMode = 0;
-    int earthPos = 200 * resM;
+    int earthPos = 256 * resM;
     int charVec = 1;
 
 
@@ -68,26 +43,30 @@ int main(){
     sf::RectangleShape dmgZone(sf::Vector2f(60, 60));
 
 
-    sf::Texture tChar, tSword, tBox;
+    sf::Texture tChar, tSword, tBox, tWallDown, tWallUp, tWallDoor, tDark;
     tChar.loadFromFile("images/Knight/Knight.png");
     tSword.loadFromFile("images/Sword/Sword.png");
     tBox.loadFromFile("images/Box/Box.png");
+    tWallDown.loadFromFile("images/Walls/WallDown.png");
+    tWallUp.loadFromFile("images/Walls/WallUp.png");
+    tWallDoor.loadFromFile("images/Walls/WallDownDoor.png");
+    tDark.loadFromFile("images/Darkness/Darkness.png");
 
-    sf::Sprite sChar(tChar), sSword(tSword); //sBox(tBox);
+    sf::Sprite sChar(tChar), sSword(tSword), sDark(tDark);
     sChar.setScale(resM, resM);
     sSword.setScale(resM, resM);
     dmgZone.setScale(resM, resM);
-    //sBox.setScale(resM, resM);
+    sDark.setScale(resM, resM);
 
     sChar.setOrigin(8, 28);
     sSword.setOrigin(3, 29);
     dmgZone.setOrigin(30, 30);
-    //sBox.setOrigin(8, 16);
 
     sSword.setRotation(0);
 
-    Crate box(&tBox, 300 * resM, 200 * resM, resM);
-    //box.setPosition();    
+    Crate box(&tBox, 300 * resM, 256 * resM, resM); 
+    Walls wallDown(&tWallDown, 0, 0, resM);
+    Walls wallUp(&tWallUp, 0, 0, resM);
 
     sChar.setPosition(charPos.x, charPos.y);
     sSword.setPosition(charPos.x, charPos.y);
@@ -106,34 +85,33 @@ int main(){
         switch (gameMode)
         {
         case 0:
-
-
             if(charPos.y > earthPos){
                 charPos.y = earthPos;
                 yVel = 0.f;
                 yVel2 = 0.f;
             }
 
-            // if(checkHitUp(charPos.x, charPos.y, sBox.getPosition().x, sBox.getPosition().y, 32, 31)){
-            //     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-            //         yVel2 = -4.f;
-            //     }
-            //     charPos.y -= yVel;
-            //     //yVel2 += 0.14;
-            //     if(charPos.y > earthPos + 35){
-            //         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-            //             yVel2 = -4.f;
-            //         }
-            //         else{
-            //             yVel2 = 0.f;
-            //         }
-            //     }
-            // }
+            for(int i = 0; i < 3; i++){
+                for(int j = 0; j < 6; j++){
+                    wallDown.setPosition((0 + j * 96) * resM, (256 - i * 64) * resM);
+                    window.draw(*wallDown.getSprite());
+                }             
+            }
+            for(int j = 0; j < 6; j++){
+                wallUp.setPosition((0 + j * 96) * resM, 64 * resM);
+                window.draw(*wallUp.getSprite());
+            }              
 
-            if(checkHitSide(charPos.x, charPos.y, box.getPositionX(), box.getPositionY(), 32, 31)){
-                charPos.x -= 5 * charVec;
-                earthPos = 200 * resM;
-            }          
+            for(int i = 0; i < 10; i++){
+                box.setPosition((300 + i * 16) * resM, 256 * resM);
+                window.draw(*box.getSprite());
+                if(checkHitSide(charPos.x, charPos.y, box.getPositionX(), box.getPositionY(), 32, 31)){
+                    charPos.x -= 5 * charVec;
+                    //earthPos = 200 * resM;
+                }                    
+            }
+
+      
             if(charPos.x < 0){
                 charPos.x = 0;
             }
@@ -167,6 +145,7 @@ int main(){
                 sSword.setRotation(0);
             }
 
+
             charPos.y += yVel;
             yVel += 0.14;
 
@@ -176,6 +155,7 @@ int main(){
             window.draw(*box.getSprite());
             window.draw(sChar);
             window.draw(sSword);
+            window.draw(sDark);
             window.display();
             window.clear();
             break;
