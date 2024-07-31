@@ -20,6 +20,7 @@ bool checkHitSide(int charPosX, int charPosY, int posX, int posY, int scaleX, in
     }
 }
 
+
 int main(){
 
 
@@ -32,6 +33,8 @@ int main(){
     int gameMode = 0;
     int earthPos = 256 * resM;
     int charVec = 1;
+
+    bool gettingDamage = 0;
 
 
     sf::RenderWindow window(sf::VideoMode(res.x, res.y), "Game");
@@ -67,6 +70,7 @@ int main(){
         boxes[i] = new Crate;
         boxes[i]->setTexture(&tBox);
         boxes[i]->setScale(resM);
+        boxes[i]->setPosition((300 + i * 16) * resM, 256 * resM);
     }
     Walls wallDown(&tWallDown, 0, 0, resM);
     Walls wallUp(&tWallUp, 0, 0, resM);
@@ -106,12 +110,18 @@ int main(){
             }              
 
             for(int i = 0; i < 3; i++){
-                boxes[i]->setPosition((300 + i * 16) * resM, 256 * resM);
-                window.draw(*boxes[i]->getSprite());
-                if(checkHitSide(charPos.x, charPos.y, boxes[i]->getPositionX(), boxes[i]->getPositionY(), 32, 31)){
-                    charPos.x -= 5 * charVec;
-                    //earthPos = 200 * resM;
-                }                    
+                if(boxes[i] != nullptr){
+                    window.draw(*boxes[i]->getSprite());
+                    //if(boxes[i]->getPosition().x <)
+                    if(checkHitSide(charPos.x, charPos.y, boxes[i]->getPosition().x, boxes[i]->getPosition().y, 32, 31)){
+                        charPos.x -= 5 * charVec;
+                        //earthPos = 200 * resM;
+                    }
+                    if(checkHitSide(boxes[i]->getPosition().x, boxes[i]->getPosition().y, dmgZone.getPosition().x, dmgZone.getPosition().y, 120, 120) && gettingDamage){
+                        delete boxes[i];
+                        boxes[i] = nullptr;
+                    }        
+                }            
             }
 
       
@@ -142,12 +152,13 @@ int main(){
                 else{
                     sSword.setRotation(sSword.getRotation() - 15);
                 }
-                window.draw(dmgZone);
+                //window.draw(dmgZone);
+                gettingDamage = 1;
             }
             else{
                 sSword.setRotation(0);
+                gettingDamage = 0;
             }
-
 
             charPos.y += yVel;
             yVel += 0.14;
