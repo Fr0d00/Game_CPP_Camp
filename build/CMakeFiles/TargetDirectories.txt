@@ -1,0 +1,3 @@
+/Users/nikitaantonov/Documents/CPP_Game2/Game_CPP_Camp/build/CMakeFiles/HelloSFML.dir
+/Users/nikitaantonov/Documents/CPP_Game2/Game_CPP_Camp/build/CMakeFiles/edit_cache.dir
+/Users/nikitaantonov/Documents/CPP_Game2/Game_CPP_Camp/build/CMakeFiles/rebuild_cache.dir

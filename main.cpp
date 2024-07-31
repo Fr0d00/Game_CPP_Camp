@@ -20,9 +20,6 @@ bool checkHitSide(int charPosX, int charPosY, int posX, int posY, int scaleX, in
     }
 }
 
-
-
-
 int main(){
 
 
@@ -49,7 +46,7 @@ int main(){
     tBox.loadFromFile("images/Box/Box.png");
     tWallDown.loadFromFile("images/Walls/WallDown.png");
     tWallUp.loadFromFile("images/Walls/WallUp.png");
-    tWallDoor.loadFromFile("images/Walls/WallDownDoor.png");
+    tWallDoor.loadFromFile("images/Walls/WallDownDoorClosed.png");
     tDark.loadFromFile("images/Darkness/Darkness.png");
 
     sf::Sprite sChar(tChar), sSword(tSword), sDark(tDark);
@@ -64,7 +61,13 @@ int main(){
 
     sSword.setRotation(0);
 
-    Crate box(&tBox, 300 * resM, 256 * resM, resM); 
+    //Crate box(&tBox, 300 * resM, 256 * resM, resM); 
+    Crate* boxes[3];
+    for(int i = 0; i < 3; i++){
+        boxes[i] = new Crate;
+        boxes[i]->setTexture(&tBox);
+        boxes[i]->setScale(resM);
+    }
     Walls wallDown(&tWallDown, 0, 0, resM);
     Walls wallUp(&tWallUp, 0, 0, resM);
 
@@ -102,10 +105,10 @@ int main(){
                 window.draw(*wallUp.getSprite());
             }              
 
-            for(int i = 0; i < 10; i++){
-                box.setPosition((300 + i * 16) * resM, 256 * resM);
-                window.draw(*box.getSprite());
-                if(checkHitSide(charPos.x, charPos.y, box.getPositionX(), box.getPositionY(), 32, 31)){
+            for(int i = 0; i < 3; i++){
+                boxes[i]->setPosition((300 + i * 16) * resM, 256 * resM);
+                window.draw(*boxes[i]->getSprite());
+                if(checkHitSide(charPos.x, charPos.y, boxes[i]->getPositionX(), boxes[i]->getPositionY(), 32, 31)){
                     charPos.x -= 5 * charVec;
                     //earthPos = 200 * resM;
                 }                    
@@ -152,7 +155,6 @@ int main(){
             sChar.setPosition(charPos.x, charPos.y);
             sSword.setPosition(charPos.x, charPos.y);
             dmgZone.setPosition(charPos.x, charPos.y);
-            window.draw(*box.getSprite());
             window.draw(sChar);
             window.draw(sSword);
             window.draw(sDark);
