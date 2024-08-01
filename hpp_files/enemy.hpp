@@ -1,10 +1,13 @@
 #include <SFML/Graphics.hpp>
 
+
+
 class Enemy
 {
 private:
     int health, damage, speed, vector;
     sf::Sprite sprite;
+    bool hit;
 
 public:
     Enemy(int health = 3, int damage = 1, int speed = 5)
@@ -34,7 +37,8 @@ public:
     {
         sprite.setScale(mult, mult);
     }
-    void setSpeed(int speed){
+    void setSpeed(int speed)
+    {
         this->speed = speed;
     }
     int getHealth()
@@ -45,7 +49,8 @@ public:
     {
         return damage;
     }
-    int getSpeed(){
+    int getSpeed()
+    {
         return speed;
     }
     sf::Vector2f getPosition()
@@ -56,23 +61,32 @@ public:
     {
         return &sprite;
     }
-    void searchChar(int charPosX, int mult)
+    void searchChar(int charPosX, int charPosY, int mult)
     {
         if (sprite.getPosition().x < charPosX - 30)
         {
             sprite.setPosition(sprite.getPosition().x + speed, sprite.getPosition().y);
             sprite.setScale(mult, mult);
             vector = 1;
+            hit = 0;
         }
         else if (sprite.getPosition().x > charPosX + 30)
         {
             sprite.setPosition(sprite.getPosition().x - speed, sprite.getPosition().y);
             sprite.setScale(-mult, mult);
             vector = -1;
+            hit = 0;
         }
-
+        else if(sprite.getPosition().y > charPosY - 32 && sprite.getPosition().y <= charPosY){
+            hit = 1;
+        }
     }
-    int getVector(){
+    int getVector()
+    {
         return vector;
     }
+    bool sendDamage(){
+        return hit;
+    }
+    
 };

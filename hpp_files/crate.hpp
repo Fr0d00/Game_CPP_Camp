@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 
+//unfortunately i don't have enought time to use crates
+
 class Crate
 {
 private:

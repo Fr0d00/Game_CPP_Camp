@@ -887,7 +887,6 @@ CMakeFiles/HelloSFML.dir/main.cpp.o: main.cpp \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/15.0.0/include/stdarg.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/15.0.0/include/stddef.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/15.0.0/include/stdint.h \
-  hpp_files/crate.hpp \
   hpp_files/enemy.hpp \
   hpp_files/wall.hpp \
   /opt/homebrew/include/SFML/Config.hpp \
@@ -1057,8 +1056,6 @@ CMakeFiles/HelloSFML.dir/main.cpp.o: main.cpp \
 hpp_files/wall.hpp:
 
 hpp_files/enemy.hpp:
-
-hpp_files/crate.hpp:
 
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/15.0.0/include/__stddef_max_align_t.h:
 
